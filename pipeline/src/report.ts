@@ -87,14 +87,14 @@ const HeliusMintResponseSchema = z.object({
 const SnapshotRowSchema = z.object({
   id: z.number(),
   taken_at: z.string(),
-  total_supply: z.string(),
+  total_supply: z.coerce.string(), // Supabase may return numeric as number
   holder_count: z.number(),
 });
 type SnapshotRow = z.infer<typeof SnapshotRowSchema>;
 
 const HolderBalanceRowSchema = z.object({
   owner: z.string(),
-  amount: z.string(),
+  amount: z.coerce.string(), // Supabase may return numeric as number
 });
 type HolderBalanceRow = z.infer<typeof HolderBalanceRowSchema>;
 
