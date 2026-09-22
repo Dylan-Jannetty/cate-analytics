@@ -18,7 +18,7 @@ export const MarketDataSchema = z.object({
   volumeUsd24h: z.number().nonnegative().nullable(),
   marketCapUsd: z.number().nonnegative().nullable(),
   liquidityUsd: z.number().nonnegative().nullable(),
-  fetchedAt: z.string().datetime(),
+  fetchedAt: z.string().datetime({ offset: true }),
 });
 
 export const RankedHolderSchema = z.object({
@@ -79,9 +79,9 @@ export const ConcentrationStatsSchema = z.object({
 
 export const WeeklyReportSchema = z.object({
   mint: z.string().min(32).max(44),
-  generatedAt: z.string().datetime(),
-  snapshotDate: z.string().datetime(),
-  priorSnapshotDate: z.string().datetime().nullable(),
+  generatedAt: z.string().datetime({ offset: true }),
+  snapshotDate: z.string().datetime({ offset: true }),
+  priorSnapshotDate: z.string().datetime({ offset: true }).nullable(),
   decimals: z.number().int().nonnegative(),
   market: MarketDataSchema.nullable(),
   holders: z.array(RankedHolderSchema),
