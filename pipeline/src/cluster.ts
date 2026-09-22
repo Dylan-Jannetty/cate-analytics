@@ -105,6 +105,7 @@ async function findFunder(
     if (before) params.set("before", before);
 
     const url = `https://api.helius.xyz/v0/addresses/${address}/transactions?${params}`;
+    if (page > 0) await sleep(600);
     const res = await fetchWithRetry(url);
 
     if (!res.ok) {
@@ -269,7 +270,7 @@ async function main() {
         `(funders found: ${funderMap.size}, truncated: ${truncatedCount}, no SOL inbound: ${noFunderCount})`
       );
     }
-  }, 500);
+  }, 600);
 
   // 5. Group wallets by funder, excluding infrastructure funders
   //    cluster_id is the funder address (per schema convention)

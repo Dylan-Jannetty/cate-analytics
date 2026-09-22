@@ -2,3 +2,6 @@ packages:
   - shared
   - pipeline
   - site
+allowBuilds:
+  esbuild: false
+  sharp: false
