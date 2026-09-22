@@ -26,7 +26,7 @@ const isDryRun = process.argv.includes("--dry-run");
 const TOP_N = 500;
 const MAX_PAGES = 5;      // max pages per wallet: 5 × 100 = 500 txns
 const PAGE_SIZE = 100;
-const CONCURRENCY = 10;   // parallel Helius requests
+const CONCURRENCY = 3;    // parallel Helius requests — keeps free-tier 429s rare
 const MAX_RETRIES = 5;
 const DB_BATCH_SIZE = 1000;
 
