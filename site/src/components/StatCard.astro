@@ -1,0 +1,16 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  sub?: string;
+  subClass?: string; // "pos" | "neg" | "neu"
+}
+
+const { label, value, sub, subClass = "neu" } = Astro.props;
+---
+
+<div class="stat-card">
+  <div class="stat-label">{label}</div>
+  <div class="stat-value">{value}</div>
+  {sub && <div class={`stat-sub ${subClass}`}>{sub}</div>}
+</div>

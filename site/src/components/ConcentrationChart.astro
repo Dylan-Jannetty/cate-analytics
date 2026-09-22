@@ -1,0 +1,37 @@
+---
+import type { ConcentrationStats } from "@cate/shared";
+
+interface Props {
+  concentration: ConcentrationStats;
+}
+
+const { concentration } = Astro.props;
+
+const rows = [
+  { label: "Top 10",  pct: concentration.top10Pct,  delta: concentration.top10PctDelta },
+  { label: "Top 50",  pct: concentration.top50Pct,  delta: concentration.top50PctDelta },
+  { label: "Top 100", pct: concentration.top100Pct, delta: concentration.top100PctDelta },
+];
+
+function fmtDelta(d: number | null): { text: string; cls: string } {
+  if (d === null) return { text: "—", cls: "neu" };
+  const sign = d > 0 ? "+" : "";
+  return { text: `${sign}${d.toFixed(2)}pp`, cls: d > 0 ? "neg" : d < 0 ? "pos" : "neu" };
+}
+---
+
+<div class="chart-wrap">
+  {rows.map(({ label, pct, delta }) => {
+    const { text, cls } = fmtDelta(delta);
+    return (
+      <div class="chart-row">
+        <span class="chart-label text-muted">{label}</span>
+        <div class="chart-bar-bg">
+          <div class="chart-bar-fill" style={`width: ${pct}%`}></div>
+        </div>
+        <span class="chart-pct">{pct.toFixed(2)}%</span>
+        <span class={`chart-delta ${cls}`}>{text}</span>
+      </div>
+    );
+  })}
+</div>

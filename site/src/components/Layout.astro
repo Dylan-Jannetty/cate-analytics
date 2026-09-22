@@ -1,0 +1,57 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  page?: "home" | "holders" | "about";
+}
+
+const {
+  title = "CATE Analytics",
+  description = "Weekly on-chain holder analytics for CATE — filtered, clustered, and ranked.",
+  page,
+} = Astro.props;
+
+const fullTitle = title === "CATE Analytics" ? title : `${title} — CATE Analytics`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="/" class="nav-brand">CATE Analytics</a>
+        <ul class="nav-links">
+          <li><a href="/" aria-current={page === "home" ? "page" : undefined}>Home</a></li>
+          <li><a href="/holders" aria-current={page === "holders" ? "page" : undefined}>Holders</a></li>
+          <li><a href="/about" aria-current={page === "about" ? "page" : undefined}>About</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer class="footer container">
+      Data updated weekly · Sources: Helius, DexScreener ·
+      <a href="https://github.com/Dylan-Jannetty/cate-analytics" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>

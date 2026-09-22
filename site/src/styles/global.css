@@ -1,0 +1,374 @@
+/* =========================================================
+   Global styles — dark theme, mobile-first
+   ========================================================= */
+
+:root {
+  --bg:          #0d0d0f;
+  --bg-card:     #141418;
+  --bg-row-alt:  #111115;
+  --border:      #2a2a32;
+  --text:        #e8e8f0;
+  --text-muted:  #8888a0;
+  --text-dim:    #55556a;
+  --accent:      #7c6ff7;
+  --green:       #3ecf74;
+  --red:         #f05252;
+  --yellow:      #f0b429;
+
+  --font: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  --radius: 8px;
+  --max-w:  1100px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+/* ── Layout helpers ────────────────────────────────────── */
+
+.container {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.section {
+  padding-block: 2.5rem;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border);
+}
+
+/* ── Typography ────────────────────────────────────────── */
+
+h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.1rem, 3vw, 1.5rem);  font-weight: 600; letter-spacing: -0.01em; margin-bottom: 1rem; }
+h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+small, .text-sm { font-size: 0.8125rem; }
+.text-muted { color: var(--text-muted); }
+.text-mono  { font-family: var(--mono); font-size: 0.875em; }
+
+/* ── Navigation ────────────────────────────────────────── */
+
+.nav {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 3.25rem;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+  list-style: none;
+  margin-left: auto;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding-block: 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+/* ── Stat cards ────────────────────────────────────────── */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .stat-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.375rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-sub {
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
+}
+
+/* ── Delta colors ──────────────────────────────────────── */
+
+.pos { color: var(--green); }
+.neg { color: var(--red); }
+.neu { color: var(--text-muted); }
+
+/* ── Badges ────────────────────────────────────────────── */
+
+.badge {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  line-height: 1.5;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.badge-cluster   { background: #2a1e5c; color: #a89ef7; }
+.badge-custodial { background: #2a2000; color: #f0b429; }
+.badge-exchange  { background: #0e2a1e; color: #3ecf74; }
+.badge-lp        { background: #0e1e2a; color: #5ab4f5; }
+.badge-bot       { background: #2a0e0e; color: #f07852; }
+.badge-manual    { background: #1e1e1e; color: #aaa; }
+
+/* ── Tables ────────────────────────────────────────────── */
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+thead th {
+  background: var(--bg-card);
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) { background: var(--bg-row-alt); }
+tbody tr:hover { background: #1a1a22; }
+
+td {
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+.td-right { text-align: right; }
+.td-mono  { font-family: var(--mono); font-size: 0.8125em; }
+
+/* ── Concentration chart ───────────────────────────────── */
+
+.chart-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.chart-row:last-child { margin-bottom: 0; }
+
+.chart-label {
+  width: 5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.chart-bar-bg {
+  flex: 1;
+  height: 1.5rem;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chart-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.chart-pct {
+  width: 4rem;
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.chart-delta {
+  width: 4.5rem;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ── Signup form ───────────────────────────────────────── */
+
+.signup-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.signup-section h2 { margin-bottom: 0.375rem; }
+.signup-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+
+.signup-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 26rem;
+  margin-inline: auto;
+  flex-wrap: wrap;
+}
+
+.signup-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5625rem 0.875rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.signup-input:focus { border-color: var(--accent); }
+.signup-input::placeholder { color: var(--text-dim); }
+
+.btn {
+  padding: 0.5625rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.signup-msg {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  min-height: 1.25rem;
+}
+
+/* ── "As of" bar ───────────────────────────────────────── */
+
+.as-of {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Section header with link ──────────────────────────── */
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.875rem;
+}
+
+.section-header a {
+  font-size: 0.8125rem;
+}
+
+/* ── About page ────────────────────────────────────────── */
+
+.prose {
+  max-width: 68ch;
+}
+
+.prose p  { margin-bottom: 1rem; color: var(--text-muted); }
+.prose h2 { margin-top: 2rem; margin-bottom: 0.5rem; color: var(--text); }
+.prose ul { padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-muted); }
+.prose li { margin-bottom: 0.375rem; }

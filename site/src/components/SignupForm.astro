@@ -1,0 +1,62 @@
+---
+// No props — static form component
+---
+
+<div class="signup-section">
+  <h2>Weekly holder report</h2>
+  <p class="signup-desc">
+    Get the filtered top-holder diff, accumulator list, and concentration stats delivered
+    to your inbox every Monday morning.
+  </p>
+  <form class="signup-form" id="signup-form" action="/.netlify/functions/subscribe" method="POST">
+    <input
+      type="email"
+      name="email"
+      class="signup-input"
+      placeholder="you@example.com"
+      required
+      autocomplete="email"
+    />
+    <button type="submit" class="btn" id="signup-btn">Subscribe</button>
+  </form>
+  <p class="signup-msg" id="signup-msg" aria-live="polite"></p>
+</div>
+
+<script>
+  const form = document.getElementById("signup-form") as HTMLFormElement | null;
+  const btn  = document.getElementById("signup-btn") as HTMLButtonElement | null;
+  const msg  = document.getElementById("signup-msg") as HTMLElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!btn || !msg) return;
+
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+    btn.disabled = true;
+    btn.textContent = "Subscribing…";
+    msg.textContent = "";
+    msg.style.color = "";
+
+    try {
+      const res = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data: { ok?: boolean; error?: string } = await res.json();
+      if (res.ok && data.ok) {
+        msg.textContent = "You're subscribed. Check your inbox.";
+        msg.style.color = "var(--green)";
+        form.reset();
+      } else {
+        throw new Error(data.error ?? "Something went wrong.");
+      }
+    } catch (err) {
+      msg.textContent = err instanceof Error ? err.message : "Something went wrong.";
+      msg.style.color = "var(--red)";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Subscribe";
+    }
+  });
+</script>

@@ -1,0 +1,68 @@
+---
+import type { RankedHolder } from "@cate/shared";
+
+interface Props {
+  holders: RankedHolder[];
+  showDelta?: boolean;
+}
+
+const { holders, showDelta = true } = Astro.props;
+
+function shortAddr(addr: string): string {
+  return `${addr.slice(0, 4)}…${addr.slice(-4)}`;
+}
+
+function rankDeltaDisplay(d: number | null): { text: string; cls: string } {
+  if (d === null) return { text: "new", cls: "pos" };
+  if (d === 0)    return { text: "—",   cls: "neu" };
+  const sign = d > 0 ? "▲" : "▼";
+  return { text: `${sign}${Math.abs(d)}`, cls: d > 0 ? "pos" : "neg" };
+}
+---
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Address</th>
+        <th class="td-right">Balance</th>
+        <th class="td-right">% Supply</th>
+        {showDelta && <th class="td-right">Δ Balance</th>}
+        {showDelta && <th class="td-right">Rank Δ</th>}
+        <th>Label</th>
+      </tr>
+    </thead>
+    <tbody>
+      {holders.map((h) => {
+        const rd = rankDeltaDisplay(h.rankDelta);
+        const isPos = h.balanceDelta.startsWith("-") ? false : true;
+        const deltaClass = isPos ? "pos" : "neg";
+        return (
+          <tr>
+            <td class="td-mono text-muted">{h.rank}</td>
+            <td>
+              <a href={h.solscanUrl} target="_blank" rel="noopener" class="text-mono">
+                {shortAddr(h.owner)}
+              </a>
+            </td>
+            <td class="td-right td-mono">{h.balance}</td>
+            <td class="td-right td-mono">{h.pct.toFixed(2)}%</td>
+            {showDelta && (
+              <td class={`td-right td-mono ${deltaClass}`}>{h.balanceDeltaFormatted}</td>
+            )}
+            {showDelta && (
+              <td class={`td-right ${rd.cls}`}>{rd.text}</td>
+            )}
+            <td>
+              {h.isCluster && <span class="badge badge-cluster">cluster</span>}
+              {!h.isCluster && h.label && h.label !== "cluster" && (
+                <span class={`badge badge-${h.label}`}>{h.label}</span>
+              )}
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>

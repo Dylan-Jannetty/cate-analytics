@@ -1,0 +1,14 @@
+[build]
+  base    = "site"
+  command = "pnpm install --frozen-lockfile && pnpm -F @cate/shared build && pnpm -F site build"
+  publish = "site/dist"
+
+[functions]
+  directory = "site/netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options      = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy      = "strict-origin-when-cross-origin"

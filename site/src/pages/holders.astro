@@ -1,0 +1,36 @@
+---
+import Layout from "../components/Layout.astro";
+import HolderTable from "../components/HolderTable.astro";
+import type { WeeklyReport } from "@cate/shared";
+
+import reportJson from "../../../pipeline/out/weekly.json";
+const data = reportJson as unknown as WeeklyReport;
+
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    weekday: "short", year: "numeric", month: "short", day: "numeric",
+  });
+}
+
+const top100 = data.holders.slice(0, 100);
+---
+
+<Layout title="Holders" page="holders" description="Top 100 filtered CATE token holders with cluster and label annotations.">
+  <section class="section">
+    <div class="section-header">
+      <h1>Top 100 Holders</h1>
+    </div>
+    <div class="as-of" style="margin-top: 0.5rem;">
+      <span>As of {fmtDate(data.snapshotDate)}</span>
+      <span>{data.holderCountRaw.toLocaleString()} raw holders · {data.holderCountFiltered.toLocaleString()} after filtering &amp; cluster collapse</span>
+    </div>
+
+    <div style="margin-bottom: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+      <span class="badge badge-cluster">cluster</span><span class="text-sm text-muted">wallets sharing a common funder</span>
+      <span class="badge badge-custodial">custodial</span><span class="text-sm text-muted">pooled app wallets (shown, not ranked as accumulators)</span>
+      <span class="badge badge-exchange">exchange</span><span class="text-sm text-muted">excluded from ranking</span>
+    </div>
+
+    <HolderTable holders={top100} showDelta={data.priorSnapshotDate !== null} />
+  </section>
+</Layout>

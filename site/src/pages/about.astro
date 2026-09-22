@@ -1,0 +1,94 @@
+---
+import Layout from "../components/Layout.astro";
+---
+
+<Layout title="About" page="about" description="How CATE Analytics filters, clusters, and ranks on-chain token holders.">
+  <section class="section">
+    <h1>About &amp; Methodology</h1>
+
+    <div class="prose" style="margin-top: 1.5rem;">
+      <h2>What this is</h2>
+      <p>
+        CATE Analytics is a weekly on-chain report for the CATE token. Raw holder lists are freely
+        available on GMGN and DexScreener — the value here is that liquidity pools, burn addresses,
+        exchange wallets, bridges, and wallet farms are removed before ranking, so you see the
+        actual distribution of real holders.
+      </p>
+
+      <h2>What gets filtered out</h2>
+      <ul>
+        <li>
+          <strong>Liquidity pools (lp)</strong> — Raydium, Pump.fun AMM, and other on-chain
+          pool accounts. These hold tokens on behalf of liquidity providers, not as individual
+          holders.
+        </li>
+        <li>
+          <strong>Burn addresses (burn)</strong> — Wallets with no private key used to
+          permanently remove tokens from circulation.
+        </li>
+        <li>
+          <strong>Exchanges (exchange)</strong> — Centralised exchange hot wallets and
+          custodial aggregation addresses. The exchange holds tokens on behalf of many users;
+          it doesn't represent a single holder.
+        </li>
+        <li>
+          <strong>Bridges (bridge)</strong> — Cross-chain bridge escrow accounts.
+        </li>
+        <li>
+          <strong>Bots (bot)</strong> — Volume bot and sandwich bot wallets identified by
+          on-chain behaviour patterns.
+        </li>
+      </ul>
+      <p>
+        Filtered wallets are tracked in a <code>wallet_labels</code> table. Labels record their
+        source (DexScreener, manual review, or cluster detection) and are never deleted — if a
+        classification is wrong, it can be corrected but the history is preserved.
+      </p>
+
+      <h2>Cluster collapsing</h2>
+      <p>
+        Some whales operate many wallets funded from a single source address. The pipeline traces
+        the oldest inbound SOL transfer for each top-500 holder. Wallets that share a common
+        funder are grouped into a cluster. In the ranked list, each cluster is shown as a single
+        entity (the representative wallet with the highest balance), with a <strong>cluster</strong>
+        badge and a note showing how many wallets are in the group.
+      </p>
+      <p>
+        Clusters of 3+ wallets are flagged. Infrastructure funders (exchanges, bridges) are
+        excluded from cluster grouping so that e.g. wallets all funded via Binance don't get
+        incorrectly merged.
+      </p>
+
+      <h2>Custodial wallets</h2>
+      <p>
+        Some on-chain applications pool user tokens in a single wallet (e.g. staking vaults,
+        launchpad escrows). These are labelled <strong>custodial</strong>. Unlike exchange wallets
+        they are <em>shown</em> in the ranked list — they represent real economic exposure to the
+        token — but they are excluded from the accumulator/distributor rankings because their
+        balance changes reflect user deposits and withdrawals, not a single entity's conviction.
+      </p>
+
+      <h2>Week-over-week diff</h2>
+      <p>
+        The pipeline takes a snapshot every Sunday. On the second run onward, each holder's
+        current balance is compared against the prior snapshot. The "Δ Balance" column shows
+        how much a wallet accumulated or distributed. Wallets that buy and fully exit within a
+        single week are invisible to the diff by design — they don't appear in either snapshot.
+      </p>
+
+      <h2>Data sources</h2>
+      <ul>
+        <li><strong>Holder balances</strong> — Helius DAS <code>getTokenAccounts</code></li>
+        <li><strong>Funder detection</strong> — Helius enhanced transactions endpoint</li>
+        <li><strong>Market data</strong> — DexScreener public API (no API key)</li>
+      </ul>
+
+      <h2>Update frequency</h2>
+      <p>
+        The pipeline runs every Sunday at 18:00 UTC via a GitHub Actions scheduled workflow.
+        The site is rebuilt automatically when <code>pipeline/out/weekly.json</code> is
+        committed to the main branch.
+      </p>
+    </div>
+  </section>
+</Layout>
