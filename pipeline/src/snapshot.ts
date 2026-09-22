@@ -211,10 +211,10 @@ async function main() {
       const ageMs = Date.now() - new Date(latest.taken_at as string).getTime();
       if (ageMs < SIX_HOURS_MS && !isForce) {
         const hoursAgo = (ageMs / 3_600_000).toFixed(1);
-        console.error(
-          `[snapshot] Last snapshot was ${hoursAgo}h ago. Use --force to override.`
+        console.log(
+          `[snapshot] Last snapshot was ${hoursAgo}h ago — skipping. Use --force to override.`
         );
-        process.exit(1);
+        process.exit(0);
       }
     }
   }
