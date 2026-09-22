@@ -4,7 +4,7 @@ dist/
 .env.local
 
 # Pipeline output (weekly.json is committed; other output files are not)
-pipeline/out/
+pipeline/out/*
 !pipeline/out/weekly.json
 
 # Astro
