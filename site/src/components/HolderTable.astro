@@ -18,6 +18,13 @@ function rankDeltaDisplay(d: number | null): { text: string; cls: string } {
   const sign = d > 0 ? "▲" : "▼";
   return { text: `${sign}${Math.abs(d)}`, cls: d > 0 ? "pos" : "neg" };
 }
+
+function fmtUsd(n: number | null): string {
+  if (n === null) return "";
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
+  if (n >= 1_000)     return `$${(n / 1_000).toFixed(1)}K`;
+  return `$${n.toFixed(2)}`;
+}
 ---
 
 <div class="table-wrap">
@@ -26,9 +33,9 @@ function rankDeltaDisplay(d: number | null): { text: string; cls: string } {
       <tr>
         <th>#</th>
         <th>Address</th>
-        <th class="td-right">Balance</th>
+        <th class="td-right">Holdings</th>
         <th class="td-right">% Supply</th>
-        {showDelta && <th class="td-right">Δ Balance</th>}
+        {showDelta && <th class="td-right">Wk Change</th>}
         {showDelta && <th class="td-right">Rank Δ</th>}
         <th>Label</th>
       </tr>
@@ -46,7 +53,12 @@ function rankDeltaDisplay(d: number | null): { text: string; cls: string } {
                 {shortAddr(h.owner)}
               </a>
             </td>
-            <td class="td-right td-mono">{h.balance}</td>
+            <td class="td-right td-mono">
+              {h.balance}
+              {h.balanceUsd !== null && (
+                <div class="text-muted" style="font-size:0.75em;font-weight:400">{fmtUsd(h.balanceUsd)}</div>
+              )}
+            </td>
             <td class="td-right td-mono">{h.pct.toFixed(2)}%</td>
             {showDelta && (
               <td class={`td-right td-mono ${deltaClass}`}>{h.balanceDeltaFormatted}</td>

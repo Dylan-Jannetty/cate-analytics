@@ -87,8 +87,8 @@ const top10Accumulators = data.topAccumulators.slice(0, 10);
             <tr>
               <th>#</th>
               <th>Address</th>
-              <th class="td-right">Δ Balance</th>
-              <th class="td-right">Balance</th>
+              <th class="td-right">Wk Change</th>
+              <th class="td-right">Holdings</th>
               <th class="td-right">% Supply</th>
               <th>Label</th>
             </tr>
@@ -102,8 +102,18 @@ const top10Accumulators = data.topAccumulators.slice(0, 10);
                     {h.owner.slice(0, 4)}…{h.owner.slice(-4)}
                   </a>
                 </td>
-                <td class="td-right td-mono pos">{h.balanceDeltaFormatted}</td>
-                <td class="td-right td-mono">{h.balance}</td>
+                <td class="td-right td-mono pos">
+                  {h.balanceDeltaFormatted}
+                  {h.balanceDeltaUsd !== null && (
+                    <div class="text-muted" style="font-size:0.75em;font-weight:400">{fmtUsd(h.balanceDeltaUsd)}</div>
+                  )}
+                </td>
+                <td class="td-right td-mono">
+                  {h.balance}
+                  {h.balanceUsd !== null && (
+                    <div class="text-muted" style="font-size:0.75em;font-weight:400">{fmtUsd(h.balanceUsd)}</div>
+                  )}
+                </td>
                 <td class="td-right td-mono">{h.pct.toFixed(2)}%</td>
                 <td>
                   {h.isCluster && <span class="badge badge-cluster">cluster</span>}
