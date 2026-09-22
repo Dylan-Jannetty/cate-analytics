@@ -10,7 +10,7 @@
 import { config, createServiceClient } from "@cate/shared";
 import { z } from "zod";
 
-const TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
+
 const PAGE_SIZE = 1000;
 const BATCH_SIZE = 1000;
 const MAX_RETRIES = 5;
@@ -108,7 +108,6 @@ async function fetchAllAccounts(mint: string): Promise<RawAccount[]> {
       method: "getTokenAccounts",
       params: {
         mint,
-        programId: TOKEN_2022_PROGRAM,
         limit: PAGE_SIZE,
         ...(cursor !== undefined ? { cursor } : {}),
         options: { showZeroBalance: false },
