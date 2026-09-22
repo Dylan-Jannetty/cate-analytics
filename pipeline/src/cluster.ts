@@ -160,7 +160,8 @@ async function findFunder(
 async function runConcurrent<T, R>(
   items: T[],
   concurrency: number,
-  fn: (item: T, index: number) => Promise<R>
+  fn: (item: T, index: number) => Promise<R>,
+  interBatchDelayMs = 0,
 ): Promise<R[]> {
   const results: R[] = new Array(items.length);
   for (let i = 0; i < items.length; i += concurrency) {
@@ -170,6 +171,9 @@ async function runConcurrent<T, R>(
     );
     for (let j = 0; j < sliceResults.length; j++) {
       results[i + j] = sliceResults[j];
+    }
+    if (interBatchDelayMs > 0 && i + concurrency < items.length) {
+      await sleep(interBatchDelayMs);
     }
   }
   return results;
@@ -265,7 +269,7 @@ async function main() {
         `(funders found: ${funderMap.size}, truncated: ${truncatedCount}, no SOL inbound: ${noFunderCount})`
       );
     }
-  });
+  }, 300);
 
   // 5. Group wallets by funder, excluding infrastructure funders
   //    cluster_id is the funder address (per schema convention)
