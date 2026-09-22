@@ -1,0 +1,60 @@
+name: Weekly pipeline
+
+on:
+  schedule:
+    - cron: '0 18 * * 0'  # Sunday 18:00 UTC
+  workflow_dispatch:
+
+jobs:
+  weekly-pipeline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      TOKEN_MINT: ${{ secrets.TOKEN_MINT }}
+      OWNER_EMAIL: ${{ secrets.OWNER_EMAIL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared
+        run: pnpm -F @cate/shared build
+
+      - name: Snapshot
+        run: pnpm -F pipeline snapshot
+
+      - name: Cluster
+        run: pnpm -F pipeline cluster
+
+      - name: Report
+        run: pnpm -F pipeline report
+
+      - name: Commit weekly.json
+        run: |
+          git diff --quiet pipeline/out/weekly.json && echo "No changes, skipping commit." && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pipeline/out/weekly.json
+          git commit -m "chore: weekly snapshot $(date -u +'%Y-%m-%d')"
+          git push

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.env.local
+
+# Pipeline output
+pipeline/out/
+
+# Astro
+site/.astro/
+site/dist/
+
+# pnpm
+.pnpm-store/
+
+# OS
+.DS_Store

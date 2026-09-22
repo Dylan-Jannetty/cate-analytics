@@ -1,0 +1,20 @@
+{
+  "name": "cate-analytics",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -F site dev",
+    "build": "pnpm -F shared build && pnpm -F site build",
+    "snapshot": "pnpm -F pipeline snapshot",
+    "cluster": "pnpm -F pipeline cluster",
+    "report": "pnpm -F pipeline report",
+    "send": "pnpm -F pipeline send"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}

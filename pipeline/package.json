@@ -1,0 +1,22 @@
+{
+  "name": "pipeline",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "snapshot": "tsx src/snapshot.ts",
+    "label": "tsx src/label.ts",
+    "cluster": "tsx src/cluster.ts",
+    "report": "tsx src/report.ts",
+    "send": "tsx src/send.ts"
+  },
+  "dependencies": {
+    "@cate/shared": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.17.0",
+    "typescript": "^5.5.4"
+  }
+}

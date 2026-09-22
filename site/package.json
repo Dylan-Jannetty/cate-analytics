@@ -1,0 +1,19 @@
+{
+  "name": "site",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@cate/shared": "workspace:*",
+    "astro": "^4.15.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
