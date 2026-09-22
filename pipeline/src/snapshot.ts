@@ -123,6 +123,15 @@ async function fetchAllAccounts(mint: string): Promise<RawAccount[]> {
     }
 
     const json: unknown = await res.json();
+    // Surface any JSON-RPC error before Zod attempts to parse
+    if (
+      json !== null &&
+      typeof json === "object" &&
+      "error" in json &&
+      json.error !== undefined
+    ) {
+      throw new Error(`Helius JSON-RPC error: ${JSON.stringify(json.error)}`);
+    }
     const parsed = HeliusPageSchema.parse(json);
     const tokenAccounts = parsed.result.token_accounts;
 
